@@ -1,5 +1,5 @@
 // Local Storage News Data Initialization with Version Control
-const NEWS_VERSION = 'v2_1779346684533';
+const NEWS_VERSION = 'v2_1779437173401';
 if (localStorage.getItem('news_version') !== NEWS_VERSION) {
   localStorage.setItem('articles', JSON.stringify(newsData));
   localStorage.setItem('news_version', NEWS_VERSION);
