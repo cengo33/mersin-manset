@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="tr" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mersin Manşet | Profesyonel & Güncel Haber Portalı</title>
+  <meta name="description" content="Mersin'in en popüler ve modern haber portalı. Teknoloji, ekonomi, bilim, spor ve kültür dünyasından en son haberler.">
+  <meta name="keywords" content="haber, güncel haberler, teknoloji, ekonomi, bilim, spor, kültür, son dakika haberleri, mersin manşet, 2026 haberleri, mersin haberleri">
+  <meta property="og:title" content="Mersin Manşet | Profesyonel & Güncel Haber Portalı">
+  <meta property="og:description" content="Mersin'in en popüler ve modern haber portalı. Teknoloji, ekonomi, bilim, spor ve kültür dünyasından en son haberler.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://mersinmanset.example.com">
+  <meta property="og:image" content="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=1200&q=80">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/png" href="assets/logo.png">
+</head>
+<body>
+
+  <!-- Header Section -->
+  <header>
+    <div class="container header-container">
+      <a href="index.html" class="logo-section" style="text-decoration: none; display: flex; align-items: center; gap: 0.6rem;">
+        <img src="assets/logo.png" alt="Mersin Manşet Logo" class="logo-img">
+        <span class="logo-text-brand">Mersin Manşet</span>
+      </a>
+      
+      <nav class="nav-menu">
+        <span class="nav-link active" data-category="all" id="nav-all">Tümü</span>
+        <span class="nav-link" data-category="teknoloji" id="nav-tech">Teknoloji</span>
+        <span class="nav-link" data-category="ekonomi" id="nav-econ">Ekonomi</span>
+        <span class="nav-link" data-category="bilim" id="nav-sci">Bilim</span>
+        <span class="nav-link" data-category="spor" id="nav-sport">Spor</span>
+        <span class="nav-link" data-category="kultur" id="nav-cult">Kültür</span>
+        <span class="nav-link" data-category="dunya" id="nav-world">Dünya</span>
+        <a href="admin.html" class="nav-link" style="color: var(--warning); display: flex; align-items: center; gap: 0.2rem;" title="Yönetim Paneli">⚙️ Admin</a>
+      </nav>
+
+      <div class="header-actions">
+        <!-- Search Input -->
+        <div class="search-container">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="search-input" class="search-input" placeholder="Haber ara...">
+        </div>
+
+        <!-- Bookmarks Trigger Button -->
+        <button id="bookmarks-toggle-btn" class="icon-btn" title="Okuma Listem" aria-label="Okuma Listesi">
+          🔖
+          <span id="bookmark-badge" class="badge-count" style="display: none;">0</span>
+        </button>
+
+        <!-- Theme Toggle Button -->
+        <button id="theme-toggle-btn" class="icon-btn" title="Koyu/Açık Tema" aria-label="Koyu Tema Geçişi">
+          🌙
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Breaking News Ticker -->
+  <div class="breaking-ticker">
+    <div class="ticker-title">Son Dakika</div>
+    <div class="ticker-content">
+      <div id="ticker-slider" class="ticker-slider">
+        <!-- Will be populated by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Body Content -->
+  <main class="container">
+    
+    <!-- Top Leaderboard Ad Slot (728x90) -->
+    <div id="top-leaderboard-ad" class="adsense-slot leaderboard-ad">
+      <!-- ADSENSE_CODE -->
+      <div class="adsense-placeholder">Google AdSense - 728x90</div>
+    </div>
+    
+    <!-- Hero Grid (Featured Slider + Widgets) -->
+    <section class="hero-grid">
+      
+      <!-- Featured Slider (left) -->
+      <div class="slider-container" id="featured-slider">
+        <!-- Slider Slides will be populated dynamically -->
+        
+        <!-- Controls -->
+        <button class="slider-arrow slider-prev" id="slider-prev" aria-label="Önceki Slayt">◀</button>
+        <button class="slider-arrow slider-next" id="slider-next" aria-label="Sonraki Slayt">▶</button>
+        
+        <div class="slider-dots" id="slider-dots">
+          <!-- Dots will be populated dynamically -->
+        </div>
+      </div>
+
+      <!-- Sidebar Widgets (right) -->
+      <aside class="sidebar">
+        <!-- Weather Widget -->
+        <div class="widget weather-widget">
+          <div class="weather-info">
+            <span class="weather-city" id="weather-city">İstanbul</span>
+            <span class="weather-temp" id="weather-temp">--°C</span>
+            <span class="weather-desc" id="weather-desc">Yükleniyor...</span>
+          </div>
+          <div class="weather-icon-container" id="weather-icon">☀️</div>
+        </div>
+
+        <!-- Sidebar Square Ad Slot (300x250) -->
+        <div id="sidebar-square-ad" class="adsense-slot sidebar-ad">
+          <!-- ADSENSE_CODE -->
+          <div class="adsense-placeholder">Google AdSense - 300x250</div>
+        </div>
+
+        <!-- Finance Widget -->
+        <div class="widget finance-widget">
+          <h4>Piyasa Durumu</h4>
+          <div class="finance-grid" id="finance-grid">
+            <!-- USD -->
+            <div class="finance-item">
+              <span class="fin-name">USD/TRY</span>
+              <span class="fin-val" id="usd-val">32.45</span>
+              <span class="fin-change change-up" id="usd-change">▲ %0.12</span>
+            </div>
+            <!-- EUR -->
+            <div class="finance-item">
+              <span class="fin-name">EUR/TRY</span>
+              <span class="fin-val" id="eur-val">35.20</span>
+              <span class="fin-change change-up" id="eur-change">▲ %0.08</span>
+            </div>
+            <!-- BIST100 -->
+            <div class="finance-item">
+              <span class="fin-name">BIST 100</span>
+              <span class="fin-val" id="bist-val">10,240</span>
+              <span class="fin-change change-down" id="bist-change">▼ %0.45</span>
+            </div>
+            <!-- XAU -->
+            <div class="finance-item">
+              <span class="fin-name">ALTIN (GR)</span>
+              <span class="fin-val" id="xau-val">2,450</span>
+              <span class="fin-change change-up" id="xau-change">▲ %0.62</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Trending Widget -->
+        <div class="widget trending-widget">
+          <h4>Trend Haberler 🔥</h4>
+          <div class="trending-list" id="trending-list">
+            <!-- Will be populated dynamically by JS -->
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <!-- Category Filter wrapper -->
+    <section class="filter-wrapper">
+      <h2 class="filter-title">Gündem</h2>
+      <div class="filter-pills" id="category-pills">
+        <button class="filter-pill active" data-category="all">Tümü</button>
+        <button class="filter-pill" data-category="teknoloji">Teknoloji</button>
+        <button class="filter-pill" data-category="ekonomi">Ekonomi</button>
+        <button class="filter-pill" data-category="bilim">Bilim</button>
+        <button class="filter-pill" data-category="spor">Spor</button>
+        <button class="filter-pill" data-category="kultur">Kültür</button>
+        <button class="filter-pill" data-category="dunya">Dünya</button>
+      </div>
+    </section>
+
+    <!-- Main News Articles Grid -->
+    <section class="news-grid" id="news-articles-grid">
+      <!-- Will be dynamically populated with card components -->
+    </section>
+
+  </main>
+
+  <!-- Slide-out Bookmarks Panel -->
+  <div class="panel-overlay" id="panel-overlay"></div>
+  <div class="bookmarks-panel" id="bookmarks-panel">
+    <div class="bookmarks-header">
+      <h3>Okuma Listem</h3>
+      <button class="bookmarks-close-btn" id="bookmarks-close-btn" aria-label="Listeyi Kapat">✕</button>
+    </div>
+    <div class="bookmarks-list" id="bookmarks-list">
+      <!-- Will be populated dynamically -->
+    </div>
+  </div>
+
+  <!-- Immersive Article Reader Modal -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal-wrapper">
+      <!-- Floating Close button inside modal -->
+      <div class="modal-header-actions">
+        <button class="modal-close-btn" id="modal-close-btn" title="Kapat" aria-label="Okuma Modunu Kapat">✕</button>
+      </div>
+
+      <div class="modal-img-container">
+        <img src="" alt="Haber Detay Görseli" id="modal-image" class="modal-img">
+      </div>
+
+      <div class="modal-body">
+        <div class="modal-meta-top">
+          <span class="modal-category" id="modal-category">Kategori</span>
+          <div class="modal-actions-bar">
+            <!-- Print button -->
+            <button class="action-icon-btn" id="modal-print-btn" title="Yazdır / PDF" aria-label="Haberi Yazdır">🖨️</button>
+            <!-- Share link button -->
+            <button class="action-icon-btn" id="modal-share-btn" title="Bağlantıyı Kopyala" aria-label="Haberi Paylaş">🔗</button>
+            <!-- Bookmark inside modal -->
+            <button class="action-icon-btn" id="modal-bookmark-btn" title="Okuma Listesine Ekle" aria-label="Favorilere Ekle">🔖</button>
+          </div>
+        </div>
+
+        <h1 class="modal-title" id="modal-title">Haber Başlığı Yükleniyor...</h1>
+
+        <div class="modal-meta-middle">
+          <div class="modal-author-avatar" id="modal-avatar">Y</div>
+          <div class="modal-author-info">
+            <span class="modal-author-name" id="modal-author">Yazar Adı</span>
+            <span id="modal-date">Tarih</span>
+          </div>
+          
+          <!-- Font Resizing Accessibility controls -->
+          <div class="accessibility-bar">
+            <span>Metin Boyutu:</span>
+            <button class="font-btn" id="font-dec-btn" title="Yazıyı Küçült" aria-label="Yazıyı Küçült">A-</button>
+            <button class="font-btn" id="font-inc-btn" title="Yazıyı Büyüt" aria-label="Yazıyı Büyüt">A+</button>
+          </div>
+        </div>
+
+        <!-- In-Article Ad Slot -->
+        <div id="modal-in-article-ad" class="adsense-slot in-article-ad">
+          <!-- ADSENSE_CODE -->
+          <div class="adsense-placeholder">Google AdSense - Haber İçi Özel Reklam</div>
+        </div>
+
+        <div class="modal-content-text" id="modal-content">
+          <!-- Text Paragraphs filled dynamically -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scroll to Top Button -->
+  <button class="scroll-top-btn" id="scroll-top-btn" title="Yukarı Çık" aria-label="Sayfa Başına Git">▲</button>
+
+  <!-- Sticky Bottom Anchor Ad Slot -->
+  <div id="sticky-bottom-ad" class="adsense-slot sticky-bottom-ad">
+    <button class="ad-close-btn" id="ad-close-btn" title="Reklamı Kapat" aria-label="Reklamı Kapat">✕</button>
+    <!-- ADSENSE_CODE -->
+    <div class="adsense-placeholder">Google AdSense - Sticky Bottom Anchor (728x90 / 320x50)</div>
+  </div>
+
+  <!-- Notification Toast Toast -->
+  <div class="toast" id="toast-notification">
+    <span class="toast-icon" id="toast-icon">✓</span>
+    <span id="toast-message">İşlem başarıyla gerçekleştirildi.</span>
+  </div>
+
+  <!-- Footer Section -->
+  <footer>
+    <div class="container footer-grid">
+      <div class="footer-col">
+        <a href="index.html" class="logo-section" style="margin-bottom: 1rem; text-decoration: none; display: flex; align-items: center; gap: 0.6rem;">
+          <img src="assets/logo.png" alt="Mersin Manşet Logo" class="logo-img" style="height: 40px;">
+          <span class="logo-text-brand" style="font-size: 1.3rem;">Mersin Manşet</span>
+        </a>
+        <p class="footer-about">Mersin Manşet, yenilikçi tasarımı ve kullanıcı odaklı haber akışıyla Mersin'in lider dijital gazetecilik platformudur.</p>
+        <div class="social-links">
+          <a href="#" class="icon-btn" aria-label="Twitter">🐦</a>
+          <a href="#" class="icon-btn" aria-label="Instagram">📸</a>
+          <a href="#" class="icon-btn" aria-label="LinkedIn">💼</a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h3>Kategoriler</h3>
+        <ul class="footer-links">
+          <li><a href="#" class="footer-link" data-cat="teknoloji">Teknoloji</a></li>
+          <li><a href="#" class="footer-link" data-cat="ekonomi">Ekonomi</a></li>
+          <li><a href="#" class="footer-link" data-cat="bilim">Bilim</a></li>
+          <li><a href="#" class="footer-link" data-cat="spor">Spor</a></li>
+          <li><a href="#" class="footer-link" data-cat="kultur">Kültür & Sanat</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h3>Hızlı Bağlantılar</h3>
+        <ul class="footer-links">
+          <li><a href="#" class="footer-link">Hakkımızda</a></li>
+          <li><a href="#" class="footer-link">Künye</a></li>
+          <li><a href="#" class="footer-link">Gizlilik Politikası</a></li>
+          <li><a href="#" class="footer-link">Çerez Tercihleri</a></li>
+          <li><a href="#" class="footer-link">İletişim</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h3>Bültene Abone Ol</h3>
+        <p class="footer-about">Gelişmeleri kaçırmamak için haftalık bültenimize kaydolun.</p>
+        <div class="search-container" style="display: flex; gap: 0.5rem; margin-top: 1rem; width:100%;">
+          <input type="email" placeholder="E-posta adresiniz..." class="search-input" style="width: 100%; border-radius: 8px; padding-left: 1rem;">
+          <button class="icon-btn" style="border-radius: 8px; font-weight: bold; background: var(--accent-gradient); color: white; border: none; padding: 0 1rem; width: auto; height: 38px;">Katıl</button>
+        </div>
+      </div>
+    </div>
+    
+    <div class="container footer-bottom">
+      <p>&copy; 2026 Mersin Manşet Haber Portalı. Tüm hakları saklıdır. Geliştirici: Antigravity AI</p>
+    </div>
+  </footer>
+
+  <!-- JS Scripts -->
+  <script src="js/newsData.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

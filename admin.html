@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="tr" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mersin Manşet | Admin Yönetici Paneli</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/png" href="assets/logo.png">
+</head>
+<body>
+
+  <!-- Header Section -->
+  <header>
+    <div class="container header-container">
+      <a href="index.html" class="logo-section" style="text-decoration: none; display: flex; align-items: center; gap: 0.6rem;">
+        <img src="assets/logo.png" alt="Mersin Manşet Logo" class="logo-img">
+        <span class="logo-text-brand">Mersin Manşet</span>
+        <span style="font-size: 0.8rem; background: var(--warning); padding: 0.2rem 0.5rem; border-radius: 4px; color: white; font-weight: bold; font-family: 'Outfit', sans-serif;">PANEL</span>
+      </a>
+      
+      <nav class="nav-menu">
+        <a href="index.html" class="nav-link" style="font-weight: 700; color: var(--accent);">← Ana Sayfaya Dön</a>
+      </nav>
+
+      <div class="header-actions">
+        <!-- Theme Toggle Button -->
+        <button id="theme-toggle-btn" class="icon-btn" title="Koyu/Açık Tema" aria-label="Koyu Tema Geçişi">
+          🌙
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Body Content -->
+  <main class="container">
+    <h2 style="margin-top: 1rem; font-size: 2rem;">İçerik Yönetim Paneli</h2>
+    <p style="color: var(--text-secondary); margin-bottom: 2rem;">Yeni makaleler oluşturabilir, görsel sürükleyip bırakarak veya pano üzerinden yapıştırarak haberlerinizi anında yayına alabilirsiniz.</p>
+
+    <div class="admin-grid">
+      <!-- Add New Article Form (left) -->
+      <section class="admin-card">
+        <h3>Haber Ekle</h3>
+        
+        <form id="add-news-form">
+          <!-- Title -->
+          <div class="form-group">
+            <label for="news-title">Haber Başlığı</label>
+            <input type="text" id="news-title" class="form-input" placeholder="Başlık giriniz..." required>
+          </div>
+
+          <!-- Category & Author Row -->
+          <div class="form-row">
+            <div class="form-group">
+              <label for="news-category">Kategori</label>
+              <select id="news-category" class="form-input" style="height: 43px;" required>
+                <option value="teknoloji">Teknoloji</option>
+                <option value="ekonomi">Ekonomi</option>
+                <option value="bilim">Bilim</option>
+                <option value="spor">Spor</option>
+                <option value="kultur">Kültür & Sanat</option>
+                <option value="dunya">Dünya</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="news-author">Yazar</label>
+              <input type="text" id="news-author" class="form-input" placeholder="Yazar adı..." required>
+            </div>
+          </div>
+
+          <!-- Excerpt -->
+          <div class="form-group">
+            <label for="news-excerpt">Haber Özeti (Excerpt)</label>
+            <textarea id="news-excerpt" class="form-input" style="height: 80px; resize: vertical;" placeholder="Ana sayfada görünecek kısa özet..." required></textarea>
+          </div>
+
+          <!-- Content Body -->
+          <div class="form-group">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem;">
+              <label for="news-content" style="margin-bottom: 0;">Detaylı Haber İçeriği (HTML Destekli)</label>
+              <button type="button" id="ai-rewrite-btn" class="btn" style="background: var(--accent-gradient); color: #fff; border: none; font-size: 0.72rem; padding: 0.25rem 0.6rem; border-radius: 6px; box-shadow: none; cursor: pointer; display: flex; align-items: center; gap: 0.2rem;">✨ AI ile Özgünleştir</button>
+            </div>
+            <textarea id="news-content" class="form-input" style="height: 180px; resize: vertical;" placeholder="Haber detay metnini yazın. Başlıklar için <h3>, blok alıntılar için <blockquote>, paragraflar için <p> etiketleri kullanabilirsiniz..." required></textarea>
+          </div>
+
+          <!-- Image Drag Drop / Paste Area -->
+          <div class="form-group">
+            <label>Haber Görseli</label>
+            <input type="file" id="news-file-input" accept="image/*" style="display: none;">
+            
+            <div class="dropzone" id="news-dropzone">
+              <span class="dropzone-icon">📷</span>
+              <span class="dropzone-text" id="dropzone-text">Dosya sürükleyin, tıklayarak seçin veya resmi kopyalayıp buraya yapıştırın (Ctrl+V)</span>
+              
+              <!-- Image Preview Container -->
+              <div class="dropzone-preview-container" id="preview-container">
+                <img src="" alt="Görsel Önizleme" class="dropzone-preview" id="dropzone-img-preview">
+                <button type="button" class="remove-preview-btn" id="remove-preview-btn" title="Görseli Kaldır">✕</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Options -->
+          <div class="form-checkbox-group">
+            <label class="checkbox-label">
+              <input type="checkbox" id="news-is-featured">
+              <span>Öne Çıkan Haber (Slider)</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" id="news-is-breaking">
+              <span>Son Dakika</span>
+            </label>
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" class="btn btn-primary" style="width: 100%;">Haberi Yayınla</button>
+        </form>
+      </section>
+
+      <!-- Manage Existing Articles & RSS Import (right) -->
+      <div class="admin-right-column" style="display: flex; flex-direction: column; gap: 2rem;">
+        
+        <!-- RSS Import Panel -->
+        <section class="admin-card">
+          <h3>Dış Kaynaktan Haber İçe Aktar (RSS)</h3>
+          <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1rem; line-height: 1.4;">
+            Aşağıdaki popüler haber kaynaklarından en son gelişmeleri çekebilir, "İçeriği Aktar" butonuna tıklayarak doğrudan form alanına yükleyebilirsiniz. Google AdSense onayı alabilmeniz için içeriği yayınlamadan önce mutlaka özgünleştirmeniz gerekmektedir.
+          </p>
+          
+          <div class="form-row" style="margin-bottom: 1.2rem; align-items: flex-end; grid-template-columns: 1fr auto;">
+            <div class="form-group" style="margin-bottom: 0;">
+              <label for="rss-source-select">Haber Kaynağı</label>
+              <select id="rss-source-select" class="form-input" style="height: 43px; font-family: inherit; font-size: 0.9rem;">
+                <option value="https://www.trthaber.com/xml_mobile.rss">TRT Haber - Ana Manşetler</option>
+                <option value="https://www.trthaber.com/manset_articles.rss">TRT Haber - Son Dakika</option>
+                <option value="https://www.ntv.com.tr/gundem.rss">NTV Haber - Gündem</option>
+              </select>
+            </div>
+            <button type="button" id="fetch-rss-btn" class="btn btn-primary" style="height: 43px; padding: 0 1.2rem; font-size: 0.9rem;">Haberleri Getir</button>
+          </div>
+          
+          <!-- RSS Loading and Status -->
+          <div id="rss-loader" style="display: none; text-align: center; padding: 1.5rem; color: var(--accent); font-weight: bold; font-size: 0.9rem;">
+            🔄 Haberler kaynağından çekiliyor, lütfen bekleyin...
+          </div>
+          
+          <!-- RSS Result List -->
+          <div id="rss-draft-list" style="max-height: 250px; overflow-y: auto; display: flex; flex-direction: column; gap: 0.8rem; border: 1px solid var(--border-color); border-radius: 8px; padding: 0.8rem; background: var(--bg-primary);">
+            <p style="text-align: center; color: var(--text-muted); font-size: 0.85rem; padding: 1rem; margin: 0;">Henüz haber çekilmedi. Bir kaynak seçip "Haberleri Getir" butonuna tıklayın.</p>
+          </div>
+        </section>
+
+        <!-- Published News List -->
+        <section class="admin-card">
+          <h3>Yayınlanan Haberler (<span id="total-articles-count">0</span>)</h3>
+          
+          <div class="admin-table-container">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th style="width: 70px;">Görsel</th>
+                  <th>Başlık</th>
+                  <th>Kategori</th>
+                  <th>Tarih</th>
+                  <th style="width: 60px; text-align: center;">İşlem</th>
+                </tr>
+              </thead>
+              <tbody id="admin-news-list">
+                <!-- Will be populated dynamically by admin.js -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Notification Toast -->
+  <div class="toast" id="toast-notification">
+    <span class="toast-icon" id="toast-icon">✓</span>
+    <span id="toast-message">İşlem başarıyla gerçekleştirildi.</span>
+  </div>
+
+  <!-- JS Scripts -->
+  <script src="js/newsData.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>
