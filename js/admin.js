@@ -1,10 +1,26 @@
-// State Management with Version Control
+// State Management with Version Control and Auto-Sync for Bot Updates
 const NEWS_VERSION = 'v2_1779437173401';
-if (localStorage.getItem('news_version') !== NEWS_VERSION) {
-  localStorage.setItem('articles', JSON.stringify(newsData));
+let localArticles = localStorage.getItem('articles') ? JSON.parse(localStorage.getItem('articles')) : null;
+const freshNews = typeof newsData !== 'undefined' ? newsData : [];
+const deletedIds = new Set(JSON.parse(localStorage.getItem('deleted_articles')) || []);
+
+if (!localArticles || localStorage.getItem('news_version') !== NEWS_VERSION) {
+  localArticles = freshNews.filter(art => !deletedIds.has(art.id));
+  localStorage.setItem('articles', JSON.stringify(localArticles));
   localStorage.setItem('news_version', NEWS_VERSION);
+} else {
+  // Sync fresh news from newsData.js (e.g. WhatsApp bot additions)
+  // Ensure we only merge articles that are NOT in local storage and NOT marked as deleted
+  const localIds = new Set(localArticles.map(art => art.id));
+  const newArticles = freshNews.filter(art => !localIds.has(art.id) && !deletedIds.has(art.id));
+  if (newArticles.length > 0) {
+    localArticles = [...newArticles, ...localArticles];
+    localStorage.setItem('articles', JSON.stringify(localArticles));
+  }
+  // Filter out any articles that are marked as deleted
+  localArticles = localArticles.filter(art => !deletedIds.has(art.id));
 }
-let articles = JSON.parse(localStorage.getItem('articles'));
+let articles = localArticles;
 
 let uploadedImageBase64 = '';
 
@@ -30,6 +46,7 @@ const elements = {
   // Table
   newsTableBody: document.getElementById('admin-news-list'),
   totalArticlesCount: document.getElementById('total-articles-count'),
+  deleteAllBtn: document.getElementById('delete-all-btn'),
   
   // Theme & Toast
   themeToggleBtn: document.getElementById('theme-toggle-btn'),
@@ -112,6 +129,10 @@ function renderAdminNewsTable() {
   articles = JSON.parse(localStorage.getItem('articles')) || [];
   elements.totalArticlesCount.textContent = articles.length;
 
+  if (elements.deleteAllBtn) {
+    elements.deleteAllBtn.style.display = articles.length === 0 ? 'none' : 'flex';
+  }
+
   if (articles.length === 0) {
     elements.newsTableBody.innerHTML = `
       <tr>
@@ -168,6 +189,13 @@ function deleteArticle(id) {
     articles = articles.filter(art => art.id !== id);
     localStorage.setItem('articles', JSON.stringify(articles));
     
+    // Also track as deleted to prevent re-merging from newsData.js
+    let deletedArticles = JSON.parse(localStorage.getItem('deleted_articles')) || [];
+    if (!deletedArticles.includes(id)) {
+      deletedArticles.push(id);
+      localStorage.setItem('deleted_articles', JSON.stringify(deletedArticles));
+    }
+    
     // Also clean from bookmarks
     let bookmarks = JSON.parse(localStorage.getItem('bookmarks')) || [];
     bookmarks = bookmarks.filter(item => item.id !== id);
@@ -175,6 +203,29 @@ function deleteArticle(id) {
 
     renderAdminNewsTable();
     showToast('Haber başarıyla silindi.', 'danger');
+  }
+}
+
+// Delete All Articles Logic
+function deleteAllArticles() {
+  if (confirm('Tüm haberleri kalıcı olarak silmek istediğinize emin misiniz? Bu işlem geri alınamaz!')) {
+    // Also track all current articles as deleted to prevent re-merging from newsData.js
+    let deletedArticles = JSON.parse(localStorage.getItem('deleted_articles')) || [];
+    articles.forEach(art => {
+      if (!deletedArticles.includes(art.id)) {
+        deletedArticles.push(art.id);
+      }
+    });
+    localStorage.setItem('deleted_articles', JSON.stringify(deletedArticles));
+
+    articles = [];
+    localStorage.setItem('articles', JSON.stringify(articles));
+    
+    // Also clean from bookmarks
+    localStorage.setItem('bookmarks', JSON.stringify([]));
+
+    renderAdminNewsTable();
+    showToast('Tüm haberler başarıyla silindi.', 'danger');
   }
 }
 
@@ -263,6 +314,11 @@ function getFormattedDate() {
 function setupEventListeners() {
   // Theme Toggle
   elements.themeToggleBtn.addEventListener('click', toggleTheme);
+
+  // Delete All Button
+  if (elements.deleteAllBtn) {
+    elements.deleteAllBtn.addEventListener('click', deleteAllArticles);
+  }
 
   // Dropzone click triggers hidden file input
   elements.dropzone.addEventListener('click', (e) => {

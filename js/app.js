@@ -1,10 +1,26 @@
-// Local Storage News Data Initialization with Version Control
+// Local Storage News Data Initialization with Auto-Sync for Bot Updates and Manual Deletions
 const NEWS_VERSION = 'v2_1779437173401';
-if (localStorage.getItem('news_version') !== NEWS_VERSION) {
-  localStorage.setItem('articles', JSON.stringify(newsData));
+let localArticles = localStorage.getItem('articles') ? JSON.parse(localStorage.getItem('articles')) : null;
+const freshNews = typeof newsData !== 'undefined' ? newsData : [];
+const deletedIds = new Set(JSON.parse(localStorage.getItem('deleted_articles')) || []);
+
+if (!localArticles || localStorage.getItem('news_version') !== NEWS_VERSION) {
+  localArticles = freshNews.filter(art => !deletedIds.has(art.id));
+  localStorage.setItem('articles', JSON.stringify(localArticles));
   localStorage.setItem('news_version', NEWS_VERSION);
+} else {
+  // Sync fresh news from newsData.js (e.g. WhatsApp bot additions)
+  // Ensure we only merge articles that are NOT in local storage and NOT marked as deleted
+  const localIds = new Set(localArticles.map(art => art.id));
+  const newArticles = freshNews.filter(art => !localIds.has(art.id) && !deletedIds.has(art.id));
+  if (newArticles.length > 0) {
+    localArticles = [...newArticles, ...localArticles];
+    localStorage.setItem('articles', JSON.stringify(localArticles));
+  }
+  // Filter out any articles that are marked as deleted
+  localArticles = localArticles.filter(art => !deletedIds.has(art.id));
 }
-let articles = JSON.parse(localStorage.getItem('articles'));
+let articles = localArticles;
 
 // State Management
 let currentCategory = 'all';

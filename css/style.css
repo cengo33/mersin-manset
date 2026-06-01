@@ -10,9 +10,9 @@
   --text-primary: #0f172a;
   --text-secondary: #475569;
   --text-muted: #64748b;
-  --accent: #2563eb;
-  --accent-rgb: 37, 99, 235;
-  --accent-gradient: linear-gradient(135deg, #2563eb, #1d4ed8);
+  --accent: #1e40af;
+  --accent-rgb: 30, 64, 175;
+  --accent-gradient: linear-gradient(135deg, #1e3a8a, #2563eb);
   --border-color: #e2e8f0;
   --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
   --hover-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
@@ -354,14 +354,16 @@ main {
   grid-template-columns: 8fr 4fr;
   gap: 2rem;
   margin-bottom: 3rem;
+  align-items: stretch;
 }
 
 /* Featured Slider */
 .slider-container {
   position: relative;
-  border-radius: 16px;
+  border-radius: 12px;
   overflow: hidden;
-  height: 480px;
+  height: 100%;
+  min-height: 480px;
   box-shadow: var(--card-shadow);
 }
 
@@ -1364,9 +1366,9 @@ footer {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: var(--bg-secondary);
-  border: 1px dashed rgba(var(--accent-rgb), 0.25);
-  border-radius: 12px;
+  background-color: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
   position: relative;
   overflow: hidden;
   margin: 1rem 0;
