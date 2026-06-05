@@ -15,7 +15,26 @@
 </head>
 <body class="dashboard-body">
 
-  <div class="dashboard-container">
+  <!-- Yazar Giriş Paneli (Login Overlay) -->
+  <div id="loginOverlay" class="login-overlay">
+    <div class="login-box">
+      <div class="login-logo">
+        <i class="fa-solid fa-newspaper"></i>
+        <span>Mersin Manşet</span>
+      </div>
+      <h2>Yazar Girişi</h2>
+      <p>Paneli kullanmak için lütfen şifreyi giriniz.</p>
+      <form id="loginForm" class="login-input-group">
+        <input type="password" id="loginPassword" placeholder="Giriş Şifresi" required />
+        <button type="submit" class="btn-login">
+          <i class="fa-solid fa-right-to-bracket"></i> Giriş Yap
+        </button>
+      </form>
+      <div id="loginError" class="login-error"></div>
+    </div>
+  </div>
+
+  <div id="dashboardContainer" class="dashboard-container" style="display: none;">
     
     <!-- SIDEBAR -->
     <aside class="dash-sidebar">
@@ -182,7 +201,50 @@
   </div>
 
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', async function() {
+      // Auth elements and check
+      const loginOverlay = document.getElementById('loginOverlay');
+      const dashboardContainer = document.getElementById('dashboardContainer');
+      const loginForm = document.getElementById('loginForm');
+      const loginPassword = document.getElementById('loginPassword');
+      const loginError = document.getElementById('loginError');
+      const targetHash = 'ce6db88a536afa9da7c6a36a67c99e12a244ff6cac8e34464f518c910d786dce'; // mersin33
+
+      async function sha256(message) {
+        const msgBuffer = new TextEncoder().encode(message);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+      }
+
+      // Check auth status
+      if (sessionStorage.getItem('author_auth') === 'true') {
+        loginOverlay.style.display = 'none';
+        dashboardContainer.style.display = 'flex';
+      } else {
+        loginOverlay.style.display = 'flex';
+        dashboardContainer.style.display = 'none';
+      }
+
+      loginForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        loginError.textContent = '';
+        const password = loginPassword.value.trim();
+        if (!password) return;
+
+        const hashedPassword = await sha256(password);
+        if (hashedPassword === targetHash) {
+          sessionStorage.setItem('author_auth', 'true');
+          loginOverlay.style.display = 'none';
+          dashboardContainer.style.display = 'flex';
+          loadArticles();
+        } else {
+          loginError.textContent = 'Hatalı şifre! Lütfen tekrar deneyin.';
+          loginPassword.value = '';
+          loginPassword.focus();
+        }
+      });
+
       const newsForm = document.getElementById('newsForm');
       const articlesList = document.getElementById('articlesList');
       const toast = document.getElementById('toast');
@@ -534,7 +596,9 @@
       });
 
       // İlk yükleme
-      loadArticles();
+      if (sessionStorage.getItem('author_auth') === 'true') {
+        loadArticles();
+      }
     });
   </script>
 </body>
