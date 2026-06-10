@@ -15,10 +15,11 @@ let zoomScale    = 'auto';
 
 // ── DOM Refs ─────────────────────────────────────────────────────────────────
 const inputs = {
-  title:   document.getElementById('newsTitle'),
-  snippet: document.getElementById('newsSnippet'),
-  date:    document.getElementById('newsDate'),
-  bgUrl:   document.getElementById('bgImage'),
+  title:      document.getElementById('newsTitle'),
+  snippet:    document.getElementById('newsSnippet'),
+  date:       document.getElementById('newsDate'),
+  bgUrl:      document.getElementById('bgImage'),
+  logoAlt:    document.getElementById('logoAltText'),
 };
 
 const els = {
@@ -123,6 +124,11 @@ updateCounter();
 // ── UI Controls ───────────────────────────────────────────────────────────────
 els.btnClearBg.addEventListener('click', () => {
   inputs.bgUrl.value = '';
+  drawCanvas();
+});
+
+document.getElementById('btnClearLogoAlt').addEventListener('click', () => {
+  inputs.logoAlt.value = '';
   drawCanvas();
 });
 
@@ -306,21 +312,58 @@ async function _draw() {
     ctx.fillRect(0, 0, SIZE, SIZE);
   }
 
-  // 2. Logo (top-left)
-  try {
-    const logoImg = new Image();
-    logoImg.crossOrigin = 'Anonymous';
-    await new Promise((res, rej) => {
-      logoImg.onload = res;
-      logoImg.onerror = rej;
-      logoImg.src = 'assets/logo.png';
-    });
+  // 2. Logo veya Alternatif Yazı (top-left)
+  const logoAltText = (inputs.logoAlt ? inputs.logoAlt.value.trim() : '');
+  if (logoAltText) {
+    // ── Pill badge (yazı modu) ──────────────────────────────────────
+    const lx = 52, ly = 52;
     ctx.save();
-    ctx.shadowColor = 'rgba(0,0,0,0.7)';
-    ctx.shadowBlur  = 24;
-    ctx.drawImage(logoImg, 52, 52, 108, 108);
+
+    // Yazı ölçüsünü hesapla
+    ctx.font = 'bold 28px "Inter", sans-serif';
+    const tw   = ctx.measureText(logoAltText).width;
+    const ph   = 54;          // pill yüksekliği
+    const pw   = tw + 44;     // pill genişliği (padding)
+    const pr   = ph / 2;      // tam yuvarlak köşe
+
+    // Pill arka planı
+    roundRect(ctx, lx, ly, pw, ph, pr);
+    ctx.fillStyle   = accent;
+    ctx.shadowColor = hexToRgba(accent, 0.6);
+    ctx.shadowBlur  = 20;
+    ctx.fill();
+
+    // İnce beyaz kenarlık
+    ctx.strokeStyle = 'rgba(255,255,255,0.25)';
+    ctx.lineWidth   = 1.5;
+    ctx.stroke();
+
+    // Yazı
+    ctx.shadowBlur   = 0;
+    ctx.fillStyle    = '#FFFFFF';
+    ctx.textAlign    = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(logoAltText, lx + pw / 2, ly + ph / 2);
+    ctx.textAlign    = 'left';
+    ctx.textBaseline = 'alphabetic';
     ctx.restore();
-  } catch (e) {}
+  } else {
+    // ── Resim modu ─────────────────────────────────────────────────
+    try {
+      const logoImg = new Image();
+      logoImg.crossOrigin = 'Anonymous';
+      await new Promise((res, rej) => {
+        logoImg.onload = res;
+        logoImg.onerror = rej;
+        logoImg.src = 'assets/logo.png';
+      });
+      ctx.save();
+      ctx.shadowColor = 'rgba(0,0,0,0.7)';
+      ctx.shadowBlur  = 24;
+      ctx.drawImage(logoImg, 52, 52, 108, 108);
+      ctx.restore();
+    } catch (e) {}
+  }
 
   // 3. SON DAKİKA badge (top-right)
   const bdgW = 228, bdgH = 50, bdgX = SIZE - bdgW - 52, bdgY = 60;
